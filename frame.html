@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST">
+    <label for="text">Enter Vin:</label>
+    <input name="text">
+    <input type="submit">
+</form>
+<TABLE>
+<TR VALIGN=TOP>
+<TD>
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</TD>
+<TD>
+{% for table in tables1 %}
+            {{titles1[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</TD>
+</TR>
+</Table>
+</body>
+</html>
