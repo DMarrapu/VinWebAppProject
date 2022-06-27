@@ -19,12 +19,30 @@
 {% endfor %}
 </TD>
 <TD>
+
+
+<TABLE>
+<TR VALIGN=TOP bgcolor="pink">
+<TD >
+{% for table in tables2 %}		
+            {{titles2[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</TD>
+</TR>
+<TR VALIGN=TOP bgcolor="LightBlue">
+<TD>
 {% for table in tables1 %}
             {{titles1[loop.index]}}
             {{ table|safe }}
 {% endfor %}
 </TD>
 </TR>
+</TABLE>
+</TD>
+</TR>
 </Table>
+
+
 </body>
 </html>
