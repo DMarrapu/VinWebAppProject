@@ -32,8 +32,11 @@ def getfile():
         url2 = 'https://api.nhtsa.gov/complaints/complaintsByVehicle?make=' + vinDict[0]['Make'] + '&model='+vinDict[0]['Model']+'&modelYear='+vinDict[0]['ModelYear']
         
         df2 = pd.DataFrame.from_dict(requests.get(url2).json()['results']).head(10)
+        url2 = 'https://api.nhtsa.gov/recalls/recallsByVehicle?make=' + vinDict[0]['Make'] + '&model='+vinDict[0]['Model']+'&modelYear='+vinDict[0]['ModelYear']
         
-        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values)
+        df3 = pd.DataFrame.from_dict(requests.get(url2).json()['results'])
+        
+        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values)
     
     return 'hi'
  
