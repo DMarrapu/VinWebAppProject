@@ -6,6 +6,7 @@ import os
 import requests
 import sys
 from flask import Flask,render_template,request
+from bing_image_downloader import downloader
 #from werkzeug.utils import secure_filename
 
 app = Flask(__name__, template_folder="C:\\Users\\dhanv\\Downloads\\project") 
@@ -36,7 +37,14 @@ def getfile():
         
         df3 = pd.DataFrame.from_dict(requests.get(url2).json()['results'])
         
-        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values)
+        searchTerm = vinDict[0]['ModelYear'] + ' ' + vinDict[0]['Make'] + ' ' + vinDict[0]['Model']
+              
+        downloader.download(searchTerm, limit=1, adult_filter_off=True, force_replace=False, timeout=60,output_dir="static")
+
+        picFolder = os.path.join('static', searchTerm)
+        pic1 = os.path.join(picFolder, 'Image_1.jpg')
+        
+        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values, user_image = pic1)
     
     return 'hi'
  
