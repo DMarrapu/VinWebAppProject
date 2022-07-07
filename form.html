@@ -1,5 +1,21 @@
-<form method="POST">
-    <label for="text">Enter Vin:</label>
-    <input name="text">
-    <input type="submit">
+<form action="/selectingMake" method="POST">
+<label for="yearSelect">Select Year:</label>
+	<select name="yearSelect" onchange="this.form.submit();">
+  		<option disabled selected value> -- select a year -- </option>
+		{% for year in years[1:] %}
+			<option value="{{year}}">{{year}}</option>
+		{% endfor %}
+	</select>
+</form>
+
+
+
+
+-or-
+<form action="/VinResults" method="POST">
+<br>
+	<label for="text">Enter Vin:</label>
+	<input name="text">
+<br>
+	<input type="submit">
 </form>
