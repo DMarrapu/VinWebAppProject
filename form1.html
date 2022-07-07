@@ -1,0 +1,27 @@
+<form action="/selectingMake" method="POST">
+<label for="yearSelect">Select Year:</label>
+	<select name="yearSelect" onchange="this.form.submit();">
+  		<option disabled selected value> {{selectedYear}} </option>
+		{% for year in years[1:] %}
+			<option value="{{year}}">{{year}}</option>
+		{% endfor %}
+	</select>
+</form>
+<form action="/selectingModel" method="POST">
+<label for="makeSelect">Select Make:</label>
+	<select name="makeSelect" onchange="this.form.submit();">
+  		<option disabled selected value> -- select a make -- </option>
+		{% for make in makes[1:] %}
+			<option value="{{make}}">{{make}}</option>
+		{% endfor %}
+	</select>
+</form>
+
+-or-
+<form action="/VinResults" method="POST">
+<br>
+	<label for="text">Enter Vin:</label>
+	<input name="text">
+<br>
+	<input type="submit">
+</form>
