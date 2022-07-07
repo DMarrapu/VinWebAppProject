@@ -5,7 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-<form method="POST">
+<form action="/selectingMake" method="POST">
+<label for="yearSelect">Select Year:</label>
+	<select name="yearSelect" onchange="this.form.submit();">
+  		<option disabled selected value> {{selectedYear}} </option>
+		{% for year in years[0:] %}
+			<option value="{{year}}">{{year}}</option>
+		{% endfor %}
+	</select>
+</form>
+<br>
+<form action="/VinResults" method="POST">
     <label for="text">Enter Vin:</label>
     <input name="text">
     <input type="submit">
