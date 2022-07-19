@@ -37,6 +37,14 @@
 	<img src="{{ user_image }}" alt="User Image" height="500">
 </TD>
 </TR>
+<TR VALIGN=TOP>
+<TD>
+{% for table in tables3 %}
+            {{titles3[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+</TD>
+</TR>
 <TR VALIGN=TOP bgcolor="pink">
 <TD >
 {% for table in tables2 %}		
@@ -53,6 +61,9 @@
 {% endfor %}
 </TD>
 </TR>
+
+
+
 </TABLE>
 </TD>
 </TR>

@@ -10,10 +10,27 @@ from flask import Flask,render_template,request
 from bing_image_downloader import downloader
 #from werkzeug.utils import secure_filename
 
+BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAAMRReQEAAAAAvnp3H6L9o5vkBdRm%2Bf13n%2FxMj94%3De8bsmu7t2ria0sB15lOYysFzyBw6r6qnKOrPIN4CZQQ9vZjgvY"
+
 fullDict = {}
 with open('data.json') as json_file:
     fullDict = json.load(json_file)
-        
+
+def search_twitter(query, tweet_fields, bearer_token = BEARER_TOKEN):
+    headers = {"Authorization": "Bearer {}".format(bearer_token)}
+
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&{}".format(
+        query, tweet_fields
+    )
+    response = requests.request("GET", url, headers=headers)
+
+    print(response.status_code)
+
+    if response.status_code != 200:
+        raise Exception(response.status_code, response.text)
+    return response.json()
+
+
 app = Flask(__name__, template_folder="C:\\Users\\dhanv\\Downloads\\project")
 
 
@@ -67,7 +84,6 @@ def getfile():
         b = df.loc[df['Value'] != '']
         df = pd.concat([b, a])
         
-        
         url2 = 'https://api.nhtsa.gov/complaints/complaintsByVehicle?make=' + vinDict[0]['Make'] + '&model='+vinDict[0]['Model']+'&modelYear='+vinDict[0]['ModelYear']
         df2 = pd.DataFrame.from_dict(requests.get(url2).json()['results']).head(10)
         #df2 = pd.DataFrame.from_dict(requests.get(url2).json())
@@ -78,12 +94,18 @@ def getfile():
         searchTerm = vinDict[0]['ModelYear'] + ' ' + vinDict[0]['Make'] + ' ' + vinDict[0]['Model']
         
         
+        
         downloader.download(searchTerm, limit=1, adult_filter_off=True, force_replace=False, timeout=60,output_dir="static")
 
         picFolder = os.path.join('static', searchTerm)
         pic1 = os.path.join(picFolder, 'Image_1.jpg')
         
-        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values, user_image = pic1, years = list(fullDict.keys()))
+        query = vinDict[0]['Make'] + vinDict[0]['Model']
+        tweet_fields = "tweet.fields=text"
+        json_response = search_twitter(query=query, tweet_fields=tweet_fields, bearer_token=BEARER_TOKEN)
+        df4 = pd.DataFrame.from_dict(json_response["data"])
+    
+        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values, user_image = pic1, years = list(fullDict.keys()), tables3=[df4.to_html(classes='data')], titles3 = df4.columns.values)
     
     return 'hi'
     
@@ -114,7 +136,12 @@ def getsearch():
         picFolder = os.path.join('static', searchTerm)
         pic1 = os.path.join(picFolder, 'Image_1.jpg')
         
-        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values, user_image = pic1, years = list(fullDict.keys()))
+        query = makeSelect + modelSelect
+        tweet_fields = "tweet.fields=text"
+        json_response = search_twitter(query=query, tweet_fields=tweet_fields, bearer_token=BEARER_TOKEN)
+        df4 = pd.DataFrame.from_dict(json_response["data"])
+        
+        return render_template('frame.html',  tables=[df.to_html(classes='data')], titles=df.columns.values,  tables1=[df2.to_html(classes='data')], titles1=df2.columns.values,  tables2=[df3.to_html(classes='data')], titles2=df3.columns.values, user_image = pic1, years = list(fullDict.keys()), tables3=[df4.to_html(classes='data')], titles3=df4.columns.values)
     
     return 'hi'
  
